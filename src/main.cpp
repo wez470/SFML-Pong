@@ -4,6 +4,9 @@
 #define WIDTH 800
 #define HEIGHT 600
 #define BALL_RADIUS 8.0f
+#define PADDLE_SPEED 600.0f
+#define BALL_SPEED 600.0f
+#define EDGE_BUFFER 5.0f
 
 int main(int argc, char** argv) {
     sf::Vector2f paddleSize(20, 100);
@@ -48,8 +51,10 @@ int main(int argc, char** argv) {
     pauseMessage.setPosition(sf::Vector2f(WIDTH / 2.0f, HEIGHT / 2.0f));
     pauseMessage.setPosition(WIDTH / 2.0f, HEIGHT / 2.0f);
 
+    sf::Clock clock;
     bool isPlaying = false;
     
+    // Main Game Loop
     while (window.isOpen()) {
         sf::Event event;
 
@@ -65,14 +70,29 @@ int main(int argc, char** argv) {
                 if (!isPlaying)
                 {
                     isPlaying = true;
+                    clock.restart();
 
                     leftPaddle.setPosition(10 + paddleSize.x / 2, HEIGHT / 2);
                     rightPaddle.setPosition(WIDTH - 10 - paddleSize.x / 2, HEIGHT / 2);
                     ball.setPosition(WIDTH / 2, HEIGHT / 2);
                 }
             }
+
         }
 
+        if (isPlaying) {
+            float deltaTime = clock.restart().asSeconds();
+
+            // Move left paddle
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
+               (leftPaddle.getPosition().y - paddleSize.y / 2 > EDGE_BUFFER)) {
+                leftPaddle.move(0.0f, -PADDLE_SPEED * deltaTime);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&
+               (leftPaddle.getPosition().y + paddleSize.y / 2 < HEIGHT - EDGE_BUFFER)) {
+                leftPaddle.move(0.0f, PADDLE_SPEED * deltaTime);
+            }
+        }
 
         window.clear(sf::Color::Black);
 
