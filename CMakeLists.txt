@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 project(Pong)
-set(EXE_NAME "Pong")
+set(EXE_NAME "pong")
 set(SOURCES src/main.cpp)
 add_executable(${EXE_NAME} ${SOURCES})
 
