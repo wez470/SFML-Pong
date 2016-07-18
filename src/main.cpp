@@ -84,14 +84,25 @@ int main(int argc, char** argv) {
             float deltaTime = clock.restart().asSeconds();
 
             // Move left paddle
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) &&
                (leftPaddle.getPosition().y - paddleSize.y / 2 > EDGE_BUFFER)) {
                 leftPaddle.move(0.0f, -PADDLE_SPEED * deltaTime);
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) &&
                (leftPaddle.getPosition().y + paddleSize.y / 2 < HEIGHT - EDGE_BUFFER)) {
                 leftPaddle.move(0.0f, PADDLE_SPEED * deltaTime);
             }
+
+            // Move right paddle
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
+               (rightPaddle.getPosition().y - paddleSize.y / 2 > EDGE_BUFFER)) {
+                rightPaddle.move(0.0f, -PADDLE_SPEED * deltaTime);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&
+               (rightPaddle.getPosition().y + paddleSize.y / 2 < HEIGHT - EDGE_BUFFER)) {
+                rightPaddle.move(0.0f, PADDLE_SPEED * deltaTime);
+            }
+
         }
 
         window.clear(sf::Color::Black);
