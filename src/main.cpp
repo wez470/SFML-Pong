@@ -12,8 +12,8 @@ int main(int argc, char** argv) {
     sf::Vector2f paddleSize(20, 100);
 
     // Set window size
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT, 32), "SFML Pong",
-                            sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT, 32), "Pong",
+            sf::Style::Titlebar | sf::Style::Close);
     window.setVerticalSyncEnabled(true);
 
     // Create left paddle
