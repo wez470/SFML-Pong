@@ -3,16 +3,16 @@
 #include <ctime>
 #include <cmath>
 
-#define WIDTH 800
+#define WIDTH 1000
 #define HEIGHT 600
 #define BALL_RADIUS 8.0f
 #define PADDLE_SPEED 600.0f
-#define BALL_SPEED 600.0f
+#define BALL_SPEED 800.0f
 #define EDGE_BUFFER 5.0f
 
 int main(int argc, char** argv) {
-    sf::Vector2f paddleSize(20, 100);
-
+    std::srand(std::time(NULL));
+    sf::Vector2f paddleSize(25, 100);
 
     // Set window size
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT, 32), "Pong",
@@ -134,7 +134,25 @@ int main(int argc, char** argv) {
                 ball.setPosition(ball.getPosition().x, HEIGHT - BALL_RADIUS - 0.1f);
             }
 
+            // Check ball paddle collisions
+            // Left paddle
+            if (ball.getPosition().x - BALL_RADIUS < leftPaddle.getPosition().x + paddleSize.x / 2 &&
+                ball.getPosition().x - BALL_RADIUS > leftPaddle.getPosition().x &&
+                ball.getPosition().y + BALL_RADIUS >= leftPaddle.getPosition().y - paddleSize.y / 2 &&
+                ball.getPosition().y - BALL_RADIUS <= leftPaddle.getPosition().y + paddleSize.y / 2) {
 
+                ballAngle = M_PI - ballAngle + (((std::rand() % 10) - 5) * M_PI / 180);
+                ball.setPosition(leftPaddle.getPosition().x + BALL_RADIUS + paddleSize.x / 2 + 0.1f, ball.getPosition().y);
+            }
+            // Right paddle
+            if (ball.getPosition().x + BALL_RADIUS > rightPaddle.getPosition().x - paddleSize.x / 2 &&
+                ball.getPosition().x + BALL_RADIUS < rightPaddle.getPosition().x &&
+                ball.getPosition().y + BALL_RADIUS >= rightPaddle.getPosition().y - paddleSize.y / 2 &&
+                ball.getPosition().y - BALL_RADIUS <= rightPaddle.getPosition().y + paddleSize.y / 2) {
+
+                ballAngle = M_PI - ballAngle + (((std::rand() % 10) - 5) * M_PI / 180);
+                ball.setPosition(rightPaddle.getPosition().x - BALL_RADIUS - paddleSize.x / 2 + 0.1f, ball.getPosition().y);
+            }
         }
 
         window.clear(sf::Color::Black);
