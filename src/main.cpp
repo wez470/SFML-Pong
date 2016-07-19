@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
+#include <ctime>
+#include <cmath>
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -10,6 +12,7 @@
 
 int main(int argc, char** argv) {
     sf::Vector2f paddleSize(20, 100);
+
 
     // Set window size
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT, 32), "Pong",
@@ -48,11 +51,11 @@ int main(int argc, char** argv) {
     sf::FloatRect textRect = pauseMessage.getLocalBounds();
     pauseMessage.setOrigin(textRect.left + textRect.width / 2.0f,
             textRect.top + textRect.height / 2.0f);
-    pauseMessage.setPosition(sf::Vector2f(WIDTH / 2.0f, HEIGHT / 2.0f));
     pauseMessage.setPosition(WIDTH / 2.0f, HEIGHT / 2.0f);
 
     sf::Clock clock;
     bool isPlaying = false;
+    float ballAngle = 45 * M_PI / 180;
     
     // Main Game Loop
     while (window.isOpen()) {
@@ -102,6 +105,35 @@ int main(int argc, char** argv) {
                (rightPaddle.getPosition().y + paddleSize.y / 2 < HEIGHT - EDGE_BUFFER)) {
                 rightPaddle.move(0.0f, PADDLE_SPEED * deltaTime);
             }
+
+            // Move ball
+            float factor = BALL_SPEED * deltaTime;
+            ball.move(std::cos(ballAngle) * factor, std::sin(ballAngle) * factor);
+
+            // Check ball screen edge collisions
+            if (ball.getPosition().x - BALL_RADIUS < 0.f) {
+                isPlaying = false;
+                pauseMessage.setString("Right Player Wins!\nPress space to restart or\nescape to exit");
+                sf::FloatRect textRect = pauseMessage.getLocalBounds();
+                pauseMessage.setOrigin(textRect.left + textRect.width / 2.0f,
+                        textRect.top + textRect.height / 2.0f);
+            }
+            if (ball.getPosition().x + BALL_RADIUS > WIDTH) {
+                isPlaying = false;
+                pauseMessage.setString("Left Player Wins!\nPress space to restart or\nescape to exit");
+                sf::FloatRect textRect = pauseMessage.getLocalBounds();
+                pauseMessage.setOrigin(textRect.left + textRect.width / 2.0f,
+                        textRect.top + textRect.height / 2.0f);
+            }
+            if (ball.getPosition().y - BALL_RADIUS < 0.f) {
+                ballAngle = -ballAngle;
+                ball.setPosition(ball.getPosition().x, BALL_RADIUS + 0.1f);
+            }
+            if (ball.getPosition().y + BALL_RADIUS > HEIGHT) {
+                ballAngle = -ballAngle;
+                ball.setPosition(ball.getPosition().x, HEIGHT - BALL_RADIUS - 0.1f);
+            }
+
 
         }
 
