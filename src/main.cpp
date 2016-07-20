@@ -67,7 +67,8 @@ int main(int argc, char** argv) {
     // Initialize the pause message
     sf::Text pauseMessage;
     pauseMessage.setFont(font);
-    pauseMessage.setCharacterSize(40);
+    pauseMessage.setCharacterSize(80);
+    pauseMessage.setScale(0.5f, 0.5f);
     pauseMessage.setString("Press space to start the game");
     sf::FloatRect textRect = pauseMessage.getLocalBounds();
     pauseMessage.setOrigin(textRect.left + textRect.width / 2.0f,
