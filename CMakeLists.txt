@@ -14,6 +14,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID STREQUAL Clang)
 endif()
 
 # Find, include, and link SFML.
-find_package(SFML 2 REQUIRED system window graphics network)
+find_package(SFML 2 REQUIRED system window graphics network audio)
 include_directories(${SFML_INCLUDE_DIR})
 target_link_libraries(${EXE_NAME} ${SFML_LIBRARIES})

@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
@@ -36,7 +37,27 @@ int main(int argc, char** argv) {
     ball.setRadius(BALL_RADIUS);
     ball.setFillColor(sf::Color::White);
     ball.setOrigin(BALL_RADIUS / 2, BALL_RADIUS / 2);
+
+    // Load sounds for game
+    sf::SoundBuffer paddleHitSoundBuffer;
+    if (!paddleHitSoundBuffer.loadFromFile("../res/paddle_hit.ogg")) {
+        return EXIT_FAILURE;
+    }
+    sf::Sound paddleHitSound(paddleHitSoundBuffer);
+
+    sf::SoundBuffer wallHitSoundBuffer;
+    if (!wallHitSoundBuffer.loadFromFile("../res/wall_hit.ogg")) {
+        return EXIT_FAILURE;
+    }
+    sf::Sound wallHitSound(wallHitSoundBuffer);
     
+    sf::SoundBuffer backgroundSoundBuffer;
+    if (!backgroundSoundBuffer.loadFromFile("../res/background.ogg")) {
+        return EXIT_FAILURE;
+    }
+    sf::Sound backgroundSound(backgroundSoundBuffer);
+    backgroundSound.setLoop(true);
+
     // Load font
     sf::Font font;
     if (!font.loadFromFile("../res/sansation.ttf")) {
@@ -74,6 +95,9 @@ int main(int argc, char** argv) {
                 {
                     isPlaying = true;
                     clock.restart();
+                    if (backgroundSound.getStatus() != sf::Sound::Status::Playing) {
+                        backgroundSound.play();
+                    }
 
                     leftPaddle.setPosition(10 + paddleSize.x / 2, HEIGHT / 2);
                     rightPaddle.setPosition(WIDTH - 10 - paddleSize.x / 2, HEIGHT / 2);
@@ -126,10 +150,12 @@ int main(int argc, char** argv) {
                         textRect.top + textRect.height / 2.0f);
             }
             if (ball.getPosition().y - BALL_RADIUS < 0.f) {
+                wallHitSound.play();
                 ballAngle = -ballAngle;
                 ball.setPosition(ball.getPosition().x, BALL_RADIUS + 0.1f);
             }
             if (ball.getPosition().y + BALL_RADIUS > HEIGHT) {
+                wallHitSound.play();
                 ballAngle = -ballAngle;
                 ball.setPosition(ball.getPosition().x, HEIGHT - BALL_RADIUS - 0.1f);
             }
@@ -141,6 +167,7 @@ int main(int argc, char** argv) {
                 ball.getPosition().y + BALL_RADIUS >= leftPaddle.getPosition().y - paddleSize.y / 2 &&
                 ball.getPosition().y - BALL_RADIUS <= leftPaddle.getPosition().y + paddleSize.y / 2) {
 
+                paddleHitSound.play();
                 ballAngle = M_PI - ballAngle + (((std::rand() % 10) - 5) * M_PI / 180);
                 ball.setPosition(leftPaddle.getPosition().x + BALL_RADIUS + paddleSize.x / 2 + 0.1f, ball.getPosition().y);
             }
@@ -150,6 +177,7 @@ int main(int argc, char** argv) {
                 ball.getPosition().y + BALL_RADIUS >= rightPaddle.getPosition().y - paddleSize.y / 2 &&
                 ball.getPosition().y - BALL_RADIUS <= rightPaddle.getPosition().y + paddleSize.y / 2) {
 
+                paddleHitSound.play();
                 ballAngle = M_PI - ballAngle + (((std::rand() % 10) - 5) * M_PI / 180);
                 ball.setPosition(rightPaddle.getPosition().x - BALL_RADIUS - paddleSize.x / 2 + 0.1f, ball.getPosition().y);
             }
