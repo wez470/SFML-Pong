@@ -1,3 +1,0 @@
-/home/weston/Code/C++/Pong/CMakeFiles/edit_cache.dir
-/home/weston/Code/C++/Pong/CMakeFiles/rebuild_cache.dir
-/home/weston/Code/C++/Pong/CMakeFiles/pong.dir
