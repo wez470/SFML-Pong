@@ -3,21 +3,28 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <iostream>
 
-#define WIDTH 1000
-#define HEIGHT 600
 #define BALL_RADIUS 8.0f
 #define PADDLE_SPEED 600.0f
 #define BALL_SPEED 800.0f
 #define EDGE_BUFFER 5.0f
 
 int main(int argc, char** argv) {
+    int WIDTH = 1000;
+    int HEIGHT = 600;
+
     std::srand(std::time(NULL));
     sf::Vector2f paddleSize(25, 100);
 
     // Set window size
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT, 32), "Pong",
-            sf::Style::Titlebar | sf::Style::Close);
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    WIDTH = desktop.width;
+    HEIGHT = desktop.height;
+    std::cout << WIDTH << " " << HEIGHT << "\n";
+
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT, 24), "Pong",
+            sf::Style::Fullscreen);
     window.setVerticalSyncEnabled(true);
 
     // Create left paddle
